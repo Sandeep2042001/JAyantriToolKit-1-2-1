@@ -1,0 +1,302 @@
+
+<html>
+   <head>
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="css/GenerateJyntri.css" rel="stylesheet" type="text/css">
+      <link href="css/General.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+      <script src="jquery.min.js"></script>
+      <script src="bootstrap.min.js"></script>
+   </head>
+   <body>
+      <div class="container">
+         <div class="form-group has-success has-feedback" style="text-align:center; margin:1% 0%; height:7%; margin-bottom:56px;">
+            <div class="col-sm-6">
+               <label "col-sm-6"> Enter Number Only</label>
+               <input type=text class="form-control" id="inputNumber"  placeholder="Enter Numbers" autocomplete="off"/>
+            </div>
+            <div class="col-sm-6">
+               <label "col-sm-6"> Enter Number with amount</label>
+               <input type=text class="form-control" id="inputNumberWithAmount"  placeholder="Enter Numbers" autocomplete="off"/>
+            </div>
+         </div>
+         <div class="form-group has-success has-feedback" style="text-align:center; margin:1% 0%; height:7%; margin-bottom:56px;">
+            <div class="col-sm-2">
+               <input type=text class="form-control" id="Amount"  onFocus="nextfield ='Reverse';"  placeholder="Amount" autocomplete="off"/>
+            </div>
+            <div class="col-sm-2">
+               <input type=text class="form-control" id="People"  placeholder="Jyntri Count" autocomplete="off"/>
+            </div>
+            <div class="col-sm-2">
+               <button class="btn btn-primary" onclick="Fn_GenerateNumber()" id="Show">Show</button>
+            </div>
+            <div style="height: 40px;" >
+               <div style="float:left; display: grid;">
+                  <div style="float:right; margin:1%">
+                     <label class="lableCustom" STYLE="font-weight: 700;">Auto</span>
+                     <input type="checkbox" id="auto" checked>
+                     <span class="checkmark"></span>
+                     </label>
+                  </div>
+				  <div style="float:right;">
+                     <label class="lableCustom" STYLE="font-weight: 700;">Equal</span>
+                     <input type="checkbox" id="equalchk" checked>
+                     <span class="checkmark"></span>
+                     </label>
+                  </div>
+               </div>
+			   <div class="col-sm-2">
+               <input type=text class="form-control" id="People"  placeholder="skip Number" autocomplete="off"/>
+            </div>
+            </div>
+			
+         </div>
+         <label id="GrandTotal" STYLE="font-weight: 700;"></label>
+         <div class="carousel-container">
+            <div class="carousel"></div>
+            <button class="button prev-button">Previous</button>
+            <button class="button next-button">Next</button>
+         </div>
+         <div class="carousel-container-Jyntri2">
+            <div class="carousel-Jyntri2"></div>
+            <button class="button prev-button-Jyntri2">Previous</button>
+            <button class="button next-button-Jyntri2">Next</button>
+         </div>
+      </div>
+   </body>
+   <script>
+      function Fn_GenerateNumber(){
+      	if(People==0 || People==""){
+      		alert(" Check Distribute into People")
+      		return
+      	}
+      	if(amount==0 || amount==""){
+      		alert(" Check Amount")
+      		return
+      	}
+          if ($('#equalchk').is(':checked'))
+      		equalchk=1;
+      	else
+      		equalchk=0;
+		if ($('#auto').is(':checked'))
+      		auto=1;
+      	else
+      		auto=0;
+		var inputString="";
+		var numbers=[];
+		input_string =$('#inputNumber').val();
+		inputString = $('#inputNumberWithAmount').val();
+		if (auto == 1 && inputString.length<=0 && input_string.length<=0) {
+			for (var i = 1; i <= 100; i++) {
+				numbers.push([i]);
+			}	
+		}
+		else {
+         if(inputString.length<1){
+            numbers = input_string.split(",")
+         }
+         else {
+      if(inputString.length>0){
+      // Separate the input string into individual number strings
+      var numberStrings = inputString.split(" ");
+      console.log(numberStrings)
+      var numbersInsideBracket = [];
+      
+      // Iterate over the number strings and extract the numbers outside and inside the brackets
+      for (var i = 0; i < numberStrings.length; i++) {
+        var numberString = numberStrings[i];
+        var numberOutsideBracket = numberString.substr(0, 2);
+        if(numberOutsideBracket=="00")
+            numberOutsideBracket="100"
+        console.log(numberOutsideBracket);
+        var numberInsideBracket = numberString.replace(/[^0-9]/g, '').substring(2);
+        console.log(numberInsideBracket);
+        // Push the extracted numbers to their respective arrays
+        numbers.push(numberOutsideBracket);
+        numbersInsideBracket.push(numberInsideBracket);
+      }
+      
+      // Output the two arrays
+      console.log("Numbers outside bracket:", numbers);
+      console.log("Numbers inside bracket:", numbersInsideBracket);
+      }
+   }
+	}
+      
+      	console.log(numbers);
+      		var slides = [];
+      	var slideJyntri=[];
+      	var amount=$("#Amount").val();
+      	var People=$("#People").val();	
+      	
+      	x=0;
+      	var number = []; // Declare and initialize the number array
+      //alert(equalchk);
+      	if (equalchk == 1) {
+      		for (var i = 0; i < numbers.length; i++) {
+				
+      			if(inputString.length>0){
+      				var Jno = parseInt(numbers[i]);
+      				amount=parseInt(numbersInsideBracket[i]);
+      			}
+      			else{
+      				var Jno = parseInt(numbers[i]);
+      			}
+      				number[Jno] = []; // Initialize the inner array
+      
+      				for (var j = 0; j < People; j++) {
+      					number[Jno][j] = Math.floor(Math.random() * amount);
+      					x += number[Jno][j];
+      				}
+      				
+      				var divisor = amount / x;
+      				x = 0;
+      
+      				for (var j = 0; j < People - 1; j++) {
+      					number[Jno][j] = Math.floor((number[Jno][j] * divisor) / 10) * 10;
+      					x += number[Jno][j];
+      				}
+      				
+      				number[Jno][j] = amount - x;
+      				x = 0;
+      		}
+      	}
+      	else{	
+      		for (var i = 0; i < numbers.length; i++) {
+      			if(inputString.length>0){
+      				var Jno = parseInt(numbers[i]);
+      				amount=parseInt(numbersInsideBracket[i]);
+      			}
+      			else{
+      				var Jno = parseInt(numbers[i]);
+      			}
+                  
+      			number[Jno] = []; // Initialize the inner arra
+      			for(var j=0;j<People-1;j++){
+      					number[Jno][j]=Math.floor((Math.random() * (amount-x))/10)*10;
+      					x+=number[Jno][j];
+      			}
+      				number[Jno][j]=amount-x;
+      				x=0;
+      		}
+      	}
+          //console.log(number)
+      	
+      	var html="";
+      	var total=GrandTotal=total10=0;
+      	var count=0;
+      	
+      	for(var i=0;i<People;i++){
+      		table = "";
+      	    for (S = 1; S <= 100; S++) {
+                  if (S % 10 == 1) {
+      				if(S>1){
+      					table += '<td style="width: 8%;text-align: center;"><h4 style="color:red;">'+total10+'<h4></td>';
+      					total10=0;
+      				}
+                      table += '<tr>';
+                  }
+      			if(typeof number[S] !== 'undefined' && typeof number[S][i] !== 'undefined'){
+                  	table += '<td><span  id=' + S + 'label>' + S + '</span><br><input class = "Input"  type="number" autocomplete=off id=' + S + 'value name='+S+' value='+number[S][i]+' onClick="this.select();"></input></td>';
+      				total+=number[S][i]
+      				total10+=number[S][i]
+      			}
+      			else {
+      				table += '<td><span  id=' + S + 'label>' + S + '</span><br><input class = "Input"  type="number" autocomplete=off id=' + S + 'value name='+S+' onClick="this.select();"></input></td>';
+      			}
+      
+              }
+      		
+      		table += '<td style="width: 8%;text-align: center;"><h4 style="color:red;">'+total10+'</td>';
+            table += '<H4 class="totalD">Total : ' + total + '</H4></tr>';
+      	
+      	var JyntriTable='<div class="Summarytable"><table id="JyntriTable">'
+      	JyntriTable+='<tbody>'+table+'</tbody>';
+      	JyntriTable+='</table></div>'
+      	//document.getElementById("main").appendChild(summarydiv);
+      
+      	var Jyntri = document.createElement("div");
+      	Jyntri.classList.add("slide");
+      	  Jyntri.innerHTML = '<h3 class="slide-heading2" contenteditable="true">Jyntri ' + (i + 1) + '</h4>' + JyntriTable;
+            slideJyntri.push(Jyntri);
+      
+      	  
+      		ran=Math.floor(Math.random() * (47 - 33) ) + 33;
+      		for(var j=1;j<=100;j++){
+      			if(typeof number[j] !== 'undefined' && typeof number[j][i] !== 'undefined'){
+      				html+=('0'+(j)).slice(-2)+"("+number[j][i]+") "
+      			}
+      		}
+      		html+="  ==== "+total;
+      
+      		var slide = document.createElement("div");
+            slide.classList.add("slide");
+      	  slide.innerHTML = '<h4 class="slide-heading2">Jyntri ' + (i + 1) + '</h4>' + html;
+            slides.push(slide);
+      
+      		html="";
+      		GrandTotal+=total;
+      		total=0;
+      }
+      $('.carousel').html("");
+      var carousel = document.querySelector('.carousel');
+          slides.forEach(function(slide) {
+            carousel.appendChild(slide);
+          });
+      	var slideIndex = 0;
+          var slideWidth = slides[0].offsetWidth;
+      
+          // Button event listeners
+          var prevButton = document.querySelector('.prev-button');
+          prevButton.addEventListener('click', function() {
+            slideIndex--;
+            if (slideIndex < 0) {
+              slideIndex = slides.length - 1;
+            }
+            carousel.style.transform = `translateX(-${slideWidth * slideIndex}px)`;
+          });
+      
+          var nextButton = document.querySelector('.next-button');
+          nextButton.addEventListener('click', function() {
+            slideIndex++;
+            if (slideIndex >= slides.length) {
+              slideIndex = 0;
+            }
+            carousel.style.transform = `translateX(-${slideWidth * slideIndex}px)`;
+          });
+      	
+      	/////************************************************************************************//
+      	$('.carousel-Jyntri2').html("");
+      	var carouselJyntri = document.querySelector('.carousel-Jyntri2');
+          slideJyntri.forEach(function(slide) {
+            carouselJyntri.appendChild(slide);
+          });
+      	
+      	var slideIndexJyntri = 0;
+          var slideWidthJyntri = slideJyntri[0].offsetWidth;
+      
+          // Button event listeners
+          var prevbuttonJyntri = document.querySelector('.prev-button-Jyntri2');
+          prevbuttonJyntri.addEventListener('click', function() {
+      		slideIndexJyntri--;
+            if (slideIndexJyntri < 0) {
+              slideIndexJyntri = slideJyntri.length - 1;
+            }
+            carouselJyntri.style.transform = `translateX(-${slideWidthJyntri * slideIndexJyntri}px)`;
+          });
+      
+          var nextButtonJyntri = document.querySelector('.next-button-Jyntri2');
+          nextButtonJyntri.addEventListener('click', function() {
+            slideIndexJyntri++;
+            if (slideIndexJyntri >= slideJyntri.length) {
+              slideIndexJyntri = 0;
+            }
+            carouselJyntri.style.transform = `translateX(-${slideWidthJyntri * slideIndexJyntri}px)`;
+          });
+      
+      	/////******************************************************************************* */
+      	//$('#GrandTotal').html("Total Distributed Amount "+GrandTotal);
+      }
+   </script>
+</html>

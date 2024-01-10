@@ -1,0 +1,403 @@
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/gameEntryManual.css">
+<link href="css/GenerateJyntri.css" rel="stylesheet" type="text/css">
+	<link href="css/General.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+      <script src="jquery.min.js"></script>
+      <script src="bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+	<div class="form-group has-success has-feedback" style="text-align:center; margin:1% 0%; height:7%; margin-bottom:10%;">
+		<div class="col-sm-2">
+		   <input type=text class="form-control" id="People"  placeholder="Juntri Count" autocomplete="off"/>
+		</div>
+		<div class="col-sm-2">
+		   <input type=text class="form-control" id="Amount"  onFocus="nextfield ='Reverse';"  placeholder="Amount" autocomplete="off"/>
+		</div>
+		<div class="col-sm-2">
+		   <input type=text class="form-control" id="skip"  onFocus="nextfield ='Reverse';"  placeholder="skip numbers" autocomplete="off"/>
+		</div>
+		<div class="col-sm-2">
+		   <button class="btn btn-primary" onclick="Fn_GenerateNumber()" id="Show">Show</button>
+		</div>
+		<div style="height: 40px;" class="col-sm-4">
+            <div style="float:left; width:85%;">
+               <div style="float:left">
+                 <!-- <label class="lableCustom" STYLE="font-weight: 700;">Jode
+                  <input type="checkbox" id="jodechk">
+                  <span class="checkmark"></span>
+                  </label>
+                  <label class="lableCustom" STYLE="font-weight: 700;">Munda</span>
+                  <input type="checkbox" id="mundachk">
+                  <span class="checkmark"></span>
+                  </label>-->
+<a href="GenerateJyntri3.html"> Break Jyntri </a>
+
+               </div>
+			   <div style="float:right;">
+				   <label class="lableCustom" STYLE="font-weight: 700;">Equal</span>
+                  <input type="checkbox" id="equalchk" checked>
+                  <span class="checkmark"></span>
+				  </label>
+				  <label class="lableCustom" STYLE="font-weight: 700;">More Zeros</span>
+                  <input type="checkbox" id="morezerochk" checked>
+                  <span class="checkmark"></span>
+				  </label>
+				  <label class="lableCustom" STYLE="font-weight: 700;">Sort</span>
+                  <input type="checkbox" id="sort" checked>
+                  <span class="checkmark"></span> 
+				</label>
+        <label class="lableCustom" STYLE="font-weight: 700;">Munda</span>
+                  <input type="checkbox" id="chkmunda" checked>
+                  <span class="checkmark"></span>
+				  </label>
+				  <label class="lableCustom" STYLE="font-weight: 700;">Jode</span>
+                  <input type="checkbox" id="chkjode" checked>
+                  <span class="checkmark"></span>
+				  </label>
+				  <label class="lableCustom" STYLE="font-weight: 700;">Bindi</span>
+                  <input type="checkbox" id="chkBindi" checked>
+                  <span class="checkmark"></span>
+          </label> 
+          <label class="lableCustom" STYLE="font-weight: 700;">Random Symbol</span>
+                  <input type="checkbox" id="chksymbol" checked>
+                  <span class="checkmark"></span> 
+				</label>
+               </div>
+               <div style="float:right; margin-right:10px">
+				  
+               </div>
+            </div>
+         </div>
+	</div>
+	<label id="GrandTotal" STYLE="font-weight: 700;"></label>
+<div id="main"></div>
+<div class="carousel-container">
+    <div class="carousel"></div>
+    <button class="button prev-button">Previous</button>
+    <button class="button next-button">Next</button>
+  </div>
+  <div class="carousel-container-Jyntri">
+    <div class="carousel-Jyntri"></div>
+    <button class="button prev-button-Jyntri">Previous</button>
+    <button class="button next-button-Jyntri">Next</button>
+  </div>
+  <div class="carousel-container-Jyntri2">
+    <div class="carousel-Jyntri2"></div>
+    <button class="button prev-button-Jyntri2">Previous</button>
+    <button class="button next-button-Jyntri2">Next</button>
+  </div>
+</div>
+</body>
+
+
+<script>
+
+function Fn_GenerateNumber() {
+  var amount = $("#Amount").val();
+  var People = $("#People").val();
+  var slides = [];
+  var slideJyntri = [];
+  var slideJyntri2 = [];
+  const mainArrayLength = 100;
+  var subarrayLength = People;
+  var maxnumbers = $("#skip").val();
+  $('.carousel').html("");
+  $('.carousel-Jyntri').html("");
+  $('.carousel-Jyntri2').html("");
+  if (People == 0 || People == "" || People>50) {
+    alert("check Jyntri Count")
+    return;
+  }
+  if (amount == 0 || amount == "") {
+   
+    return;
+  }
+  if (maxnumbers == "") {
+    maxnumbers = 0;
+  }
+  if ($('#sort').is(':checked'))
+    sort = 1;
+  else
+    sort = 0;
+
+  if ($('#chkmunda').is(':checked'))
+    munda = 1;
+  else
+    munda = 0;
+   if ($('#chkjode').is(':checked'))
+    jode = 1;
+  else
+    jode = 0;
+  if ($('#chkBindi').is(':checked'))
+    Bindi = 1;
+  else
+    Bindi = 0;
+  if($('#chksymbol').is(':checked'))
+    symbol=1
+  else 
+    symbol=0
+
+  var number;
+  function generateArray(mainArrayLength, subarrayLength, amount, callback) {
+  const mainArray = [];
+  function roundToNearestMultipleOf5(value) {
+  return Math.round(value / 10) * 10;
+}
+  for (let i = 0; i < mainArrayLength; i++) {
+    const subarray = [];
+    let remainingAmount = amount;
+    if (subarrayLength==2){
+        if(Math.floor(Math.random() * subarrayLength)==0){
+          console.log('yes');
+          randomValue=Math.floor(Math.random() * subarrayLength)*remainingAmount;
+          subarray.push(randomValue);
+          remainingAmount -= randomValue;
+          subarray.push(remainingAmount);
+        }
+        else {
+          console.log('no');
+          const randomValue = Math.floor(Math.random() * remainingAmount);
+          value=Math.floor(randomValue/5)*5
+          subarray.push(value);
+          remainingAmount -= value;
+          subarray.push(remainingAmount);
+        }
+    }
+    else {
+      const zeroIndex = Math.floor(Math.random() * subarrayLength); // Randomly select the index to make zero
+    const zeroIndex2 = Math.floor(Math.random() * subarrayLength); 
+    const randomNumbersSubarray = [];
+    let totalSum = 0;
+    for (let j = 0; j < subarrayLength; j++) {
+      if (j === zeroIndex || j === zeroIndex2) {
+        randomNumbersSubarray.push(0);
+      } 
+       else {
+        const randomNumber = Math.floor(Math.random() * amount) + 1;
+        randomNumbersSubarray.push(randomNumber);
+        totalSum += randomNumber;
+      }
+    }
+    
+      const quotient = amount / totalSum;
+      const multipliedNumbers = randomNumbersSubarray.map((num) => roundToNearestMultipleOf5(num * quotient));
+          //var value=randomValue
+        //value=Math.floor(value/5)*5
+        for (let i = 0; i < subarrayLength; i++) {
+          subarray.push(multipliedNumbers[i]);
+        }
+      
+    }
+    console.log(i);
+    console.log(subarray)
+    // Check if total sum is not equal to amount and adjust values if needed
+    const sum = subarray.reduce((acc, val) => acc + val, 0);
+    console.log(sum)
+    if (sum !== amount) {
+      const diff = amount - sum;
+      console.log(diff)
+      for(q=0;q<subarrayLength;q++){
+        if(subarray[subarrayLength - (q+1)]>(diff*-1)){
+          console.log(subarray[subarrayLength - (q+1)])
+          subarray[subarrayLength - (q+1)] += diff; // Adjust the last element to compensate for the difference
+          break;
+        }
+      }
+      
+    }
+    mainArray.push(subarray);
+    let sum2 = subarray.reduce((acc, val) => acc + val, 0);
+subarray.push(sum2);
+remainingAmount -= sum2;
+  }
+
+  callback(mainArray);
+}
+
+  generateArray(mainArrayLength, subarrayLength, amount, function (result) {
+    number = result;
+  console.log(number)
+  if(munda==0){
+    for (var i = 0; i < People; i++) {
+      for (var j = 0; j <=8 ; j++) {
+        number[j][i]=0;
+      }
+      number[99][i]=0;
+    }
+  }
+  if(Bindi==0){
+    for (var i = 0; i < People; i++) {
+      for (var j = 9; j <=99 ; j+=10) {
+        number[j][i]=0;
+      }
+    }
+  }
+  if(jode==0){
+    for (var i = 0; i < People; i++) {
+      for (var j = 10; j <=99 ; j+=11) {
+        number[j][i]=0;
+      }
+      number[99][i]=0;
+    }
+  }
+
+    var html = "";
+    var total = GrandTotal = total10 = 0;
+    var count = 0;
+  const symbols = ['@', '!', '#', '$', '%', '&', '+', '-','/','|'];
+  const randomIndex = Math.floor(Math.random() * symbols.length);
+  var symbolstring=symbols[randomIndex];
+
+    for (var i = 0; i < People; i++) {
+      for (var j = 0; j <= 99; j++) {
+        if (number[j][i] != 0) {
+          if (!symbol)
+            html += ('0' + (j + 1)).slice(-2) + "(" + number[j][i] + ") ";
+          else
+            html += ('0' + (j + 1)).slice(-2) + symbolstring + number[j][i]+" ";
+          total += parseInt(number[j][i]);
+        }
+      }
+
+      if (sort != 1) {
+        html = html.split(' ').sort(function () { return 0.5 - Math.random() }).join(' ');
+      }
+
+      html += "  ==== " + total;
+
+      var slide = document.createElement("div");
+      slide.classList.add("slide");
+      slide.innerHTML = '<h4 class="slide-heading">Jyntri ' + (i + 1) + '</h4>' + html;
+      slides.push(slide);
+
+      table = "";
+      for (S = 1; S <= 100; S++) {
+        if (S % 10 == 1) {
+          if (S > 1) {
+            table += '<td style="width: 8%;text-align: center;"><h4 style="color:red; font-weight:bold;">' + total10 + '<h4></td>';
+            total10 = 0;
+          }
+          table += '<tr>';
+        }
+
+        if (typeof number[S - 1] !== 'undefined' && typeof number[S - 1][i] !== 'undefined' && number[S - 1][i]>0) {
+          table += '<td><span  id=' + S + 'label>' + S + '</span><br><input  type="number" autocomplete=off id=' + S + 'value name=' + S + ' value=' + number[S - 1][i] + ' onClick="this.select();"></input></td>';
+          total10 += number[S - 1][i];
+        } else {
+          table += '<td><span  id=' + S + 'label>' + S + '</span><br><input type="number" autocomplete=off id=' + S + 'value name=' + S + ' onClick="this.select();"></input></td>';
+        }
+      }
+      table += '<td style="width: 8%;text-align: center;"><h4 style="color:red; font-weight:bold;">' + total10 + '</td>';
+      table += '<H4 class="totalD">Total : ' + total + '</H4></tr>';
+      total10=0;
+      var JyntriTable = '<div class="Summarytable"><table id="JyntriTable">';
+      JyntriTable += '<tbody>' + table + '</tbody>';
+      JyntriTable += '</table></div>';
+
+      var Jyntri = document.createElement("div");
+      Jyntri.classList.add("slide");
+      Jyntri.innerHTML = '<h4 class="slide-heading" contenteditable="true">Jyntri ' + (i + 1) + '</h4>' + JyntriTable;
+      slideJyntri.push(Jyntri);
+
+      var Jyntri = document.createElement("div");
+      Jyntri.classList.add("slide");
+      Jyntri.innerHTML = '<h3 class="slide-heading2" contenteditable="true">Jyntri ' + (i + 1) + '</h3>' + JyntriTable;
+      slideJyntri2.push(Jyntri);
+
+      html = "";
+      GrandTotal += total;
+      total = 0;
+    }
+
+    var carousel = document.querySelector('.carousel');
+    slides.forEach(function (slide) {
+      carousel.appendChild(slide);
+    });
+    var slideIndex = 0;
+    var slideWidth = slides[0].offsetWidth;
+
+    var prevButton = document.querySelector('.prev-button');
+    prevButton.addEventListener('click', function () {
+      slideIndex--;
+      if (slideIndex < 0) {
+        slideIndex = slides.length - 1;
+      }
+      carousel.style.transform = `translateX(-${slideWidth * slideIndex}px)`;
+    });
+
+    var nextButton = document.querySelector('.next-button');
+    nextButton.addEventListener('click', function () {
+      slideIndex++;
+      if (slideIndex >= slides.length) {
+        slideIndex = 0;
+      }
+      carousel.style.transform = `translateX(-${slideWidth * slideIndex}px)`;
+    });
+
+    var carouselJyntri = document.querySelector('.carousel-Jyntri');
+    slideJyntri.forEach(function (slide) {
+      carouselJyntri.appendChild(slide);
+    });
+
+    var slideIndexJyntri = 0;
+    var slideWidthJyntri = slideJyntri[0].offsetWidth;
+
+    var prevbuttonJyntri = document.querySelector('.prev-button-Jyntri');
+    prevbuttonJyntri.addEventListener('click', function () {
+      slideIndexJyntri--;
+      if (slideIndexJyntri < 0) {
+        slideIndexJyntri = slideJyntri.length - 1;
+      }
+      carouselJyntri.style.transform = `translateX(-${slideWidthJyntri * slideIndexJyntri}px)`;
+    });
+
+    var nextButtonJyntri = document.querySelector('.next-button-Jyntri');
+    nextButtonJyntri.addEventListener('click', function () {
+      slideIndexJyntri++;
+      if (slideIndexJyntri >= slideJyntri.length) {
+        slideIndexJyntri = 0;
+      }
+      carouselJyntri.style.transform = `translateX(-${slideWidthJyntri * slideIndexJyntri}px)`;
+    });
+
+
+    var carouselJyntri2 = document.querySelector('.carousel-Jyntri2');
+    slideJyntri2.forEach(function (slide) {
+      carouselJyntri2.appendChild(slide);
+    });
+
+    var slideIndexJyntri2 = 0;
+    var slideWidthJyntri2 = slideJyntri2[0].offsetWidth;
+
+    var prevbuttonJyntri2 = document.querySelector('.prev-button-Jyntri2');
+    prevbuttonJyntri2.addEventListener('click', function () {
+      slideIndexJyntri2--;
+      if (slideIndexJyntri2 < 0) {
+        slideIndexJyntri2 = slideJyntri2.length - 1;
+      }
+      carouselJyntri2.style.transform = `translateX(-${slideWidthJyntri2 * slideIndexJyntri2}px)`;
+    });
+
+    var nextButtonJyntri2 = document.querySelector('.next-button-Jyntri2');
+    nextButtonJyntri2.addEventListener('click', function () {
+      slideIndexJyntri2++;
+      if (slideIndexJyntri2 >= slideJyntri2.length) {
+        slideIndexJyntri2 = 0;
+      }
+      carouselJyntri2.style.transform = `translateX(-${slideWidthJyntri2 * slideIndexJyntri2}px)`;
+    });
+
+    $('#GrandTotal').html("Total Distributed Amount " + GrandTotal);
+  });
+}
+
+
+</script>
+</html>
